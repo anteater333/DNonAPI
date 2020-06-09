@@ -71,7 +71,7 @@ class Auth:
             resp = User.decode_auth_token(auth_token)
             if not isinstance(resp, str):
                 try:
-                    user = User.objects.get({'_id': resp})
+                    user = User.objects.get({'userId': resp})
                 except DoesNotExist:
                     response_object = {
                         'status': 'fail',
@@ -82,7 +82,7 @@ class Auth:
                     response_object = {
                         'status': 'success',
                         'data': {
-                            'user_id': user.userId,
+                            'userId': user.userId,
                             'email': user.email,
                             'admin': user.admin,
                             'dateRegistered': str(user.dateRegistered)

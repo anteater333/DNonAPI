@@ -18,7 +18,7 @@ class TestDevelopmentConfig(TestCase):
         self.assertTrue(app.config['DEBUG'] is True)                   # 조건이 true인지 확인
         self.assertFalse(current_app is None)
         self.assertTrue(
-            app.config['MONGO_URI'] == 'mongodb://127.0.0.1:27017/monallogDB'
+            app.config['MONGO_URI'] == 'mongodb://127.0.0.1:27017/dnonDevDB'
         )   # 여러 줄에 나눠서
 
 class TestTestingConfig(TestCase):

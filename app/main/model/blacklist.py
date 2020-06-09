@@ -24,7 +24,7 @@ class BlacklistToken(MongoModel):
     
     @staticmethod
     def check_blacklist(auth_token):
-        # check whetehr auth token has been blacklisted
+        # check whether auth token has been blacklisted
         try:
             BlacklistToken.objects.get({'token':str(auth_token)})
         except DoesNotExist:
