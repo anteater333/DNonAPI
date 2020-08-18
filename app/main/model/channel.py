@@ -1,9 +1,16 @@
 from pymodm import fields, MongoModel
 
+from app.main.model.battlefield import Battlefield
+from app.main.model.user import User
+
 class Channel(MongoModel):
     # _id = ObjectId()
-    channelID = fields.IntegerField(primary_key=True)
-    battlefield = fields.EmbeddedDocumentField(Battlefield)
+    channelId = fields.IntegerField(primary_key=True)
     ranking = fields.ListField(field=fields.CharField())
-    participants = fields.EmbeddedDocumentListField(User)
     maximum = fields.IntegerField()
+    battlefield = fields.EmbeddedDocumentField(Battlefield)
+    participants = fields.EmbeddedDocumentListField(User)
+
+    class Meta:
+        collection_name = 'channels'
+        final = True

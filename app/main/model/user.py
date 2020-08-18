@@ -3,19 +3,18 @@ from app.main import flask_bcrypt
 
 import datetime
 import jwt
+from app.main.model.saveinfo import SaveInfo
+from app.main.model.gamelog import GameLog
 from app.main.model.blacklist import BlacklistToken
 from ..config import key
 
-
 class User(MongoModel):
-    userId = fields.IntegerField(required=True)
+    userId = fields.IntegerField(primary_key=True, required=True)
     userName = fields.CharField(required=True)
     email = fields.EmailField()
-    dateRegistered = fields.DateTimeField()
-    favorites = fields.ListField(field=fields.CharField())
-    admin = fields.BooleanField(default=False)
-    # lines = fields.EmbeddedDocumentListField(line)    # Embedded 이렇게 하면 될듯
-    userPassword_hash = fields.CharField()
+    passwordHash = fields.CharField()
+    saveData = fields.EmbeddedDocumentListField(SaveInfo)
+    gameLogs = fields.EmbeddedDocumentListField(GameLog)
 
     @property
     def userPassword(self):
@@ -23,10 +22,10 @@ class User(MongoModel):
 
     @userPassword.setter
     def userPassword(self, userPassword):
-        self.userPassword_hash = flask_bcrypt.generate_password_hash(userPassword).decode('utf-8')  # hashing userPassword
+        self.passwordHash = flask_bcrypt.generate_password_hash(userPassword).decode('utf-8')  # hashing userPassword
 
     def check_userPassword(self, userPassword):
-        return flask_bcrypt.check_password_hash(self.userPassword_hash, userPassword)
+        return flask_bcrypt.check_password_hash(self.passwordHash, userPassword)
 
     def encode_auth_token(self, user_id):
         """
@@ -70,5 +69,5 @@ class User(MongoModel):
         return "<user '{}'".format(self.userName)
 
     class Meta:
-        collection_name = 'users'   # 지정 안해주면 User collection을 따로 만들어버림
+        collection_name = 'users'   # 지정 안해주면 "User" collection을 따로 만들어버림
         final = True                # _cls 필드 저장 안하도록 설정
