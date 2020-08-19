@@ -3,8 +3,8 @@ from app.main import flask_bcrypt
 
 import datetime
 import jwt
-from app.main.model.saveinfo import SaveInfo
-from app.main.model.gamelog import GameLog
+# from app.main.model.saveinfo import SaveInfo
+# from app.main.model.gamelog import GameLog
 from app.main.model.blacklist import BlacklistToken
 from ..config import key
 
@@ -13,8 +13,12 @@ class User(MongoModel):
     userName = fields.CharField(required=True)
     email = fields.EmailField()
     passwordHash = fields.CharField()
-    saveData = fields.EmbeddedDocumentListField(SaveInfo)
-    gameLogs = fields.EmbeddedDocumentListField(GameLog)
+    saveData = fields.ListField(
+        field=fields.ReferenceField('saveInfo')
+    )
+    gameLogs = fields.ListField(
+        field=fields.ReferenceField('gameLogs')
+    )
 
     @property
     def userPassword(self):

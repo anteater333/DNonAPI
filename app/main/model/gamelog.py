@@ -1,13 +1,16 @@
 from pymodm import fields, MongoModel
 
-from app.main.model.channel import Channel
+# from app.main.model.channel import Channel
 
 class GameLog(MongoModel):
     # _id = ObjectId()
     logId = fields.IntegerField(primary_key=True)
     killLogs = fields.ListField(fields=fields.CharField())
     score = fields.CharField()
-    channel = fields.EmbeddedDocumentField(Channel)
+    
+    channel = fields.ReferenceField('channels')
+    # channel = fields.EmbeddedDocumentField(Channel)
+    
     rank = fields.IntegerField()
 
     class Meta:
