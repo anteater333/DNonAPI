@@ -1,18 +1,18 @@
 from pymodm import fields, MongoModel
+    
+class Coordinate(MongoModel):
+    x = fields.IntegerField()
+    y = fields.IntegerField()
 
 class SaveInfo(MongoModel):
     # _id = ObjectId()
     saveId = fields.IntegerField(primary_key=True)
     channelId = fields.IntegerField()
     score = fields.IntegerField()
-    location = EmbeddedDocumentField(Coordinate)
-    items = fields.ListField(fields=fields.CharField())
+    location = fields.EmbeddedDocumentField(model=Coordinate)
+    items = fields.ListField(field=fields.CharField())
     guest = fields.BooleanField(default=True)
     guestPssword = fields.CharField()
-    
-    class Coordinate(MongoModel):
-        x = fields.IntegerField()
-        y = fields.IntegerField()
 
     def __repr__(self):
         return "<saveInfo '{}'".format(self.saveID)

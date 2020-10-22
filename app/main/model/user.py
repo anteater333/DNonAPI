@@ -3,8 +3,8 @@ from app.main import flask_bcrypt
 
 import datetime
 import jwt
-from app.main.model.saveinfo import SaveInfo
-from app.main.model.gamelog import GameLog
+# from app.main.model.saveinfo import SaveInfo
+# from app.main.model.gamelog import GameLog
 from app.main.model.blacklist import BlacklistToken
 from ..config import key
 
@@ -13,8 +13,13 @@ class User(MongoModel):
     userName = fields.CharField(required=True)
     email = fields.EmailField()
     passwordHash = fields.CharField()
-    saveData = fields.EmbeddedDocumentListField(SaveInfo)
-    gameLogs = fields.EmbeddedDocumentListField(GameLog)
+    saveData = fields.ListField(
+        field=fields.ReferenceField('saveInfo')
+    )
+    gameLogs = fields.ListField(
+        field=fields.ReferenceField('gameLogs')
+    )
+    dateRegistered = fields.DateTimeField()
 
     @property
     def userPassword(self):
@@ -54,7 +59,7 @@ class User(MongoModel):
         :return: integer|string
         """
         try:
-            payload = jwt.decode(auth_token, key)
+            payload = jwt.decode(auth_token.split()[1], key, algorithms='HS256')
             is_blacklisted_token = BlacklistToken.check_blacklist(auth_token)
             if is_blacklisted_token:
                 return 'Token blacklisted. Please log in again.'
