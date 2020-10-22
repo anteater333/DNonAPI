@@ -19,6 +19,7 @@ class User(MongoModel):
     gameLogs = fields.ListField(
         field=fields.ReferenceField('gameLogs')
     )
+    dateRegistered = fields.DateTimeField()
 
     @property
     def userPassword(self):
@@ -58,7 +59,7 @@ class User(MongoModel):
         :return: integer|string
         """
         try:
-            payload = jwt.decode(auth_token, key)
+            payload = jwt.decode(auth_token.split()[1], key, algorithms='HS256')
             is_blacklisted_token = BlacklistToken.check_blacklist(auth_token)
             if is_blacklisted_token:
                 return 'Token blacklisted. Please log in again.'
