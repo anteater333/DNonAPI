@@ -1,6 +1,8 @@
 ### 개인 자료
 .dev/
 
+.svr/
+
 ### Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
