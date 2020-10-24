@@ -9,7 +9,6 @@ class GameLog(MongoModel):
     score = fields.CharField()
     
     channel = fields.ReferenceField('channels')
-    # channel = fields.EmbeddedDocumentField(Channel)
     
     rank = fields.IntegerField()
 
