@@ -18,7 +18,7 @@ class UserList(Resource):
         return get_all_users()
 
     @api.response(201, 'User successfully created.')
-    @api.doc('create a new player')
+    @api.doc('create a new user')
     @api.expect(_user, validate=True)
     def post(self):
         """Creates a new User"""
