@@ -3,6 +3,9 @@
 
 .svr/
 
+### Connection / Key Info
+secrets.json
+
 ### Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
