@@ -30,12 +30,21 @@ class UserList(Resource):
 @api.param('userName', 'The User name')
 @api.response(404, 'User not found.')
 class User(Resource):
-    @admin_token_required
     @api.doc('get a user')
-    @api.marshal_list_with(_user)
+    @api.marshal_list_with(_user)   # user를 dto에 맞춰 serializable 하게 변환
     def get(self, userName):
         """get a user given their name"""
         user = get_a_user(userName)
+        if not user:
+            api.abort(404)
+        else:
+            return user
+
+    @token_required
+    @api.doc('unsubscribe this user')
+    def delete(self, userName):
+        """delete user from database"""
+        user = get_a_user(userName) ## 삭제 후 해당 유저 데이터 반환하는 메소드로 구현
         if not user:
             api.abort(404)
         else:
