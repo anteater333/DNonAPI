@@ -1,16 +1,15 @@
 from flask import request
 from flask_restx import Resource
 
-from ..util.decorator import token_required, admin_token_required
+from ..util.decorator import token_required, prove_yourself
 from ..util.dto import UserDto
-from ..service.user_service import save_new_user, get_all_users, get_a_user
+from ..service.user_service import save_new_user, get_all_users, get_a_user, delete_a_user
 
 api = UserDto.api
 _user = UserDto.user
 
 @api.route('/')
 class UserList(Resource):
-    @token_required
     @api.doc('list_of_registred_users')
     @api.marshal_list_with(_user, envelope='data')
     def get(self):
@@ -40,11 +39,12 @@ class User(Resource):
         else:
             return user
 
-    @token_required
+    @prove_yourself
+    @api.marshal_with(_user)
     @api.doc('unsubscribe this user')
     def delete(self, userName):
         """delete user from database"""
-        user = get_a_user(userName) ## 삭제 후 해당 유저 데이터 반환하는 메소드로 구현
+        user = delete_a_user(userName)
         if not user:
             api.abort(404)
         else:

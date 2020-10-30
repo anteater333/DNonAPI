@@ -3,10 +3,11 @@ from flask_restx import Namespace, fields
 class UserDto:
     api = Namespace('user', description='user related operations')
     user = api.model(name='user', model={
+        'userId': fields.Integer(readonly=True, description='Unique user identifier'),
         'userName': fields.String(required=True, description='user name'),
         'email': fields.String(required=True, description='user email address'),
         'userPassword': fields.String(required=True, description="user password"),
-        'dateRegistered': fields.DateTime(description="date user registered")
+        'dateRegistered': fields.DateTime(readonly=True, description="date user registered")
     })
 
 class AuthDto:
