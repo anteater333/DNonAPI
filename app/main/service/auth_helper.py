@@ -83,6 +83,7 @@ class Auth:
                         'status': 'success',
                         'data': {
                             'userId': user.userId,
+                            'userName': user.userName,
                             'email': user.email,
                             'dateRegistered': str(user.dateRegistered)
                         }

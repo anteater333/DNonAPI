@@ -75,7 +75,7 @@ class User(MongoModel):
         return "<user '{}'".format(self.userName)
 
     class Meta:
-        indexes = [IndexModel([('userName', 1)], unique=True)]  # unique field 지정은 이렇게
+        indexes = [IndexModel([('userName', 1)], unique=True), IndexModel([('email', 1)], unique=True)]  # unique field 지정은 이렇게
 
         collection_name = 'users'   # 지정 안해주면 "User" collection을 따로 만들어버림
         final = True                # _cls 필드 저장 안하도록 설정

@@ -33,6 +33,14 @@ def get_a_user(userName):
     except DoesNotExist:
         return None
 
+def delete_a_user(userName):
+    try:
+        user = User.objects.get({'userName': userName})
+        user.delete()
+        return user
+    except DoesNotExist:
+        return None
+
 def generate_token(user):
     try:
         # generate the auth token

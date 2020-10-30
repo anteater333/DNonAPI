@@ -17,6 +17,22 @@ def token_required(f):
     
     return decorated
 
+def prove_yourself(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        data, status = Auth.get_logged_in_user(request)
+        token = data.get('data')
+        if not token:
+            return data, status
+        if kwargs['userName'] != token.get('userName'):
+            response_object = {
+                'status': 'fail',
+                'message': 'unauthorized access'
+            }
+            return response_object, 401
+        return f(*args, **kwargs)
+    return decorated
+
 # 관리자 기능 예
 def admin_token_required(f):
     @wraps(f)
