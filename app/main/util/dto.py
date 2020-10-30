@@ -18,9 +18,9 @@ class AuthDto:
     })
 
 class ChannelDto:
-    api = Namespace('channel', description='channel related operations')
-    channel = api.model(name='channel', model={
-        'id': fields.Integer(description='Unique channel identifier'),
-        'ranking': fields.List(fields.String(), description='Player ranking for this channel'),
+    api = Namespace('ch', description='channel related operations')
+    channel = api.model(name='ch', model={
+        'id': fields.Integer(readonly=True, description='Unique channel identifier'),
+        'ranking': fields.List(fields.String(), readonly=True, description='Player ranking for this channel'),
         'maximum': fields.Integer(description='Maximum participants number')
     })

@@ -21,6 +21,7 @@ class User(MongoModel):
         field=fields.ReferenceField('gameLogs')
     )
     dateRegistered = fields.DateTimeField()
+    admin = fields.BooleanField(default=False)
 
     @property
     def userPassword(self):
