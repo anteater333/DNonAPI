@@ -24,6 +24,8 @@ class TestingConfig(Config):                # 테스팅 설정
 
 class ProductionConfig(Config):             # 배포판 설정
     DEBUG = False
+    ## DB 정보들 ##
+    MONGO_URI = conn_info['DB_URL']
 
 
 config_by_name = dict(
