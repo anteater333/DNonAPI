@@ -83,8 +83,10 @@ class Auth:
                         'status': 'success',
                         'data': {
                             'userId': user.userId,
+                            'userName': user.userName,
                             'email': user.email,
-                            'dateRegistered': str(user.dateRegistered)
+                            'dateRegistered': str(user.dateRegistered),
+                            'admin': user.admin
                         }
                     }
                 return response_object, 200

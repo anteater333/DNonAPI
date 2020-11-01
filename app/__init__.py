@@ -3,15 +3,18 @@ from flask import Blueprint
 
 from .main.controller.user_controller import api as user_ns
 from .main.controller.auth_controller import api as auth_ns
+from .main.controller.channel_controller import api as channel_ns
 
 blueprint = Blueprint('api', __name__)
 
 api = Api(
     blueprint,
-    title='FLASK RESTPLUS API BOILER-PLATE WITH JWT',
-    version='1.0',
-    description='a boilerplate for flask restplus web service'
+    title='DNon API Server',
+    version='0.0.1',
+    description='600억 대작 게임 DNon의 API 서버입니다. 보안상의 틈이 존재하지 않습니다.',
+    contact='anteater1056@gmail.com'
 )
 
 api.add_namespace(user_ns, path='/user')
-api.add_namespace(auth_ns)
+api.add_namespace(auth_ns, path='/auth')
+api.add_namespace(channel_ns, path='/ch')
