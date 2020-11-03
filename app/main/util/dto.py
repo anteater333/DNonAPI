@@ -51,3 +51,10 @@ class ChannelDto:
         'ranking': fields.List(fields.Nested(model=player), readonly=True, description='Player ranking for this channel'),        
         'participants': fields.List(fields.Nested(model=player), readonly=True, description='Players now participating this game')
     })
+
+class SaveDto:
+    api = Namesapce('save', description='Operations for saving in-game data')
+
+    save_info = api.model(name='save-info', model={
+        
+    })

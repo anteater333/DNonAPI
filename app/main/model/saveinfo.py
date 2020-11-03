@@ -12,7 +12,7 @@ class SaveInfo(MongoModel):
     location = fields.EmbeddedDocumentField(model=Coordinate)
     items = fields.ListField(field=fields.CharField())
     guest = fields.BooleanField(default=True)
-    guestPssword = fields.CharField()
+    guestPssword = fields.CharField(required=False)
 
     def __repr__(self):
         return "<saveInfo '{}'".format(self.saveID)
