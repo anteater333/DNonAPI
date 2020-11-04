@@ -52,9 +52,27 @@ class ChannelDto:
         'participants': fields.List(fields.Nested(model=player), readonly=True, description='Players now participating this game')
     })
 
-class SaveDto:
-    api = Namesapce('save', description='Operations for saving in-game data')
+class SavedInfoDto:
+    api = Namesapce('saved-info', description='Operations for saving in-game data')
 
-    save_info = api.model(name='save-info', model={
-        
+    location = api.model(name='location', model={
+        x = fields.Integer(readonly=True),
+        y = fields.Integer(readonly=True)
+    })
+
+    saving_info = api.model(name='saving-info', model={
+        channelId = fields.Integer(readonly=True),
+        score = fields.Integer(description='The point that player gained till saves the game info'),
+        location = fields.Nested(model=location, description='The location player saved this data and quit the gmae.'),
+        items = fields.List(fields.String(), description='List of items the player has')
+    })
+
+    saved_info = api.model(name='saved-info', model={
+        guest = fields.Boolean(description='Whether this player is guest or signed'),
+        savedId = fields.Integer(description='Unique saved-info identifier'),
+        guestPassword = fields.String(description='One-time password needed when loading the info')
+        channelId = fields.Integer(description='Identifier for channel that game belongs'),
+        score = fields.Integer(description='The point that player gained till saves the game info'),
+        location = fields.Nested(model=location, description='The location player saved this data and quit the gmae.'),
+        items = fields.List(fields.String(), description='List of items the player has')
     })
