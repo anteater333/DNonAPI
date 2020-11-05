@@ -3,7 +3,7 @@ from flask_restx import Resource
 
 from ..util.decorator import token_required, prove_yourself
 from ..util.dto import SavedInfoDto
-from ..service.saved_service import save_game_progress
+from ..service.saved_service import save_game_progress, load_guest_game_progress, load_user_game_progress
 from ..service.auth_helper import Auth
 
 api = SavedInfoDto.api
@@ -29,14 +29,14 @@ class SavedInfo(Resource):
         
         return save_game_progress(data=data)
 
-# @api.route('/<saveId>')
-# @api.param('saveId', 'Unique identifier')
-# class SignedSavedInfo(Resource):
-#     @prove_yourself
-#     def get(self):
-
-# @api.route('/<saveId>/<guestPassword>')
-# @api.param('saveId', 'Unique identifier')
-# @api.param('guestPassword', 'One-time password that you got when saved the data')
-# class GuestSavedInfo(Resource):
-#     def get(self):
+@api.route('/<savedId>/<guestPassword>')
+@api.param('savedId', 'Unique identifier')
+@api.param('guestPassword', 'One-time password that you got when saved the data')
+class GuestSavedInfo(Resource):
+    @api.doc('get and delete the guest\'s saved game progress.')
+    @api.marshal_with(_saved_info)
+    def delete(self, savedId, guestPassword):
+        saved_data = load_guest_game_progress(savedId, guestPassword)
+        if not saved_data:
+            api.abort(404, 'data not found')
+        return saved_data

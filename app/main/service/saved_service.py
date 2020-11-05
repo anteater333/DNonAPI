@@ -40,6 +40,7 @@ def save_game_progress(data):
 
             return {
                 'status': 'success',
+                'message': 'Successfully saved.',
                 'data': {
                     'savedId': new_save.savedId,
                     'otp': otp
@@ -54,17 +55,50 @@ def save_game_progress(data):
                     user.save()
                     return {
                         'status': 'success',
-                        'message': 'Successfully saved. The previous game data has been replaced.'
+                        'message': 'Successfully saved. The previous game data has been replaced.',
+                        'data': {
+                            'savedId': new_save.savedId
+                        }
                     }, 200
 
             user.savedData.append(new_save)
             user.save()
             return {
                 'status': 'success',
-                'message': 'Successfully saved'
+                'message': 'Successfully saved',
+                'data': {
+                    'savedId': new_save.savedId
+                }
             }, 201
     except DoesNotExist:
         return {
             'status': 'fail',
             'message': 'Can not find such user'
         }, 404
+
+def load_guest_game_progress(savedId, otp):
+    try:
+        saved_data = SavedInfo.objects.get({'_id':int(savedId)})
+        saved_data.delete()
+        return saved_data
+    except DoesNotExist:
+        return None
+
+def load_user_game_progress(savedId, userName):
+    try:
+        user = User.objects.get({'userName':userName})
+
+        target = -1
+        for idx, saved in enumerate(user.savedData):
+            if saved.savedId == int(savedId):
+                target = idx
+                break
+
+        if target == -1:
+            return None
+        saved_data = user.savedData[target]
+        user.savedData.pop(target)
+        user.save()
+        return saved_data
+    except DoesNotExist:
+        return None
