@@ -13,16 +13,19 @@ _saved_info = SavedInfoDto.saved_info
 @api.route('/')
 class SavedInfo(Resource):
     @api.response(201, 'The game data saved successfully.')
+    @api.response(200, 'The data replaced to the latest.')
     @api.doc('saves ongoing game data.')
-    @api.expect(_saved_info, validate=True)
+    @api.expect(_saving_info, validate=True)
     def post(self):
         """Saves current game and leaves"""
         data = request.json
 
-        if Auth.get_logged_in_user(request)[0].get('status') == 'success':
-            data['signed'] = True
+        signed = Auth.get_logged_in_user(request)
+        if signed[0].get('status') == 'success':
+            data['guest'] = True
+            data['userId'] = signed[0].get('data').get('userId')
         else:
-            data['signed'] = False
+            data['guest'] = False
         
         return save_game_progress(data=data)
 
