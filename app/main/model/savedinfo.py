@@ -4,19 +4,24 @@ class Coordinate(MongoModel):
     x = fields.IntegerField()
     y = fields.IntegerField()
 
-class SaveInfo(MongoModel):
+    class Meta:
+        final = True
+
+class SavedInfo(MongoModel):
     # _id = ObjectId()
-    saveId = fields.IntegerField(primary_key=True)
+    savedId = fields.IntegerField(primary_key=True)
+    playerName = fields.CharField()
     channelId = fields.IntegerField()
     score = fields.IntegerField()
     location = fields.EmbeddedDocumentField(model=Coordinate)
     items = fields.ListField(field=fields.CharField())
+    dateSaved = fields.DateTimeField()
     guest = fields.BooleanField(default=True)
-    guestPssword = fields.CharField()
+    guestPassword = fields.CharField(required=False)
 
     def __repr__(self):
-        return "<saveInfo '{}'".format(self.saveID)
+        return "<savedInfo '{}'".format(self.savedId)
 
     class Meta:
-        collection_name = 'saveInfo'
+        collection_name = 'savedInfo'
         final = True

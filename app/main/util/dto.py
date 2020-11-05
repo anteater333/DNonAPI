@@ -51,3 +51,31 @@ class ChannelDto:
         'ranking': fields.List(fields.Nested(model=player), readonly=True, description='Player ranking for this channel'),        
         'participants': fields.List(fields.Nested(model=player), readonly=True, description='Players now participating this game')
     })
+
+class SavedInfoDto:
+    api = Namespace('saved-info', description='Operations for saving in-game data')
+
+    location = api.model(name='location', model={
+        'x': fields.Integer(),
+        'y': fields.Integer()
+    })
+
+    saving_info = api.model(name='saving-info', model={
+        'channelId': fields.Integer(description='Identifier for channel that game belongs'),
+        'playerName': fields.String(description='The player\'s name'),
+        'score': fields.Integer(description='The point that player gained till saves the game info'),
+        'location': fields.Nested(model=location, description='The location player saved this data and quit the gmae.'),
+        'items': fields.List(fields.String(), description='List of items the player has')
+    })
+
+    saved_info = api.model(name='saved-info', model={
+        'guest': fields.Boolean(description='Whether this player is guest or signed'),
+        'savedId': fields.Integer(description='Unique saved-info identifier'),
+        'guestPassword': fields.String(description='One-time password needed when loading the info'),
+        'channelId': fields.Integer(description='Identifier for channel that game belongs'),
+        'playerName': fields.String(description='The player\'s name'),
+        'score': fields.Integer(description='The point that player gained till saves the game info'),
+        'location': fields.Nested(model=location, description='The location player saved this data and quit the gmae.'),
+        'items': fields.List(fields.String(), description='List of items the player has'),
+        'dateSaved': fields.DateTime(description='The date player saved this game')
+    })

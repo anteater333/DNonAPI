@@ -2,11 +2,13 @@ from flask import request
 from flask_restx import Resource
 
 from ..util.decorator import token_required, prove_yourself
-from ..util.dto import UserDto
+from ..util.dto import UserDto, SavedInfoDto
 from ..service.user_service import save_new_user, get_all_users, get_a_user, delete_a_user
+from ..service.saved_service import load_user_game_progress
 
 api = UserDto.api
 _user = UserDto.user
+_saved_info = SavedInfoDto.saved_info
 
 @api.route('/')
 class UserList(Resource):
@@ -49,3 +51,16 @@ class User(Resource):
             api.abort(404)
         else:
             return user
+
+@api.route('/<userName>/saved-info/<savedId>')
+@api.param('userName', 'User name who owns data')
+@api.param('savedId', 'Unique saved data identifier')
+class SavedInfo(Resource):
+    @prove_yourself
+    @api.doc('get and delete a saved game progress.')
+    @api.marshal_with(_saved_info)
+    def delete(self, userName, savedId):
+        saved_data = load_user_game_progress(savedId, userName)
+        if not saved_data:
+            api.abort(404, 'data not found')
+        return saved_data
