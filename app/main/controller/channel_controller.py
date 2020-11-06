@@ -86,12 +86,12 @@ class Participants(Resource):
         elif response == 'exceed':
             api.abort(409, 'Exceeded maximum players number.')
         elif response == 'duplicated':
-            api.abort(409, 'The name already taken by somebody.')    
+            api.abort(409, 'The name already taken by somebody in this channel.')    
         else:
             return {
                 'status': 'success',
                 'message': 'Successfully entered.'
-            }
+            }, 201
 
 @api.route('/<channelId>/participants/<playerName>')
 @api.param('channelId', 'The channel identifier')
