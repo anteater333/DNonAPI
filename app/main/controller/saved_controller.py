@@ -7,7 +7,6 @@ from ..service.saved_service import save_game_progress, load_guest_game_progress
 from ..service.auth_helper import Auth
 
 api = SavedInfoDto.api
-_saving_info = SavedInfoDto.saving_info
 _saved_info = SavedInfoDto.saved_info
 
 @api.route('/')
@@ -15,7 +14,7 @@ class SavedInfo(Resource):
     @api.response(201, 'The game data saved successfully.')
     @api.response(200, 'The data replaced to the latest.')
     @api.doc('saves ongoing game data.')
-    @api.expect(_saving_info, validate=True)
+    @api.expect(_saved_info, validate=True)
     def post(self):
         """Saves current game and leaves"""
         data = request.json
