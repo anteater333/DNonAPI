@@ -38,9 +38,11 @@ class ChannelDto:
     })
 
     player = api.model(name='player', model={
-        'playerName': fields.String(),
-        'signed': fields.Boolean(readonly=True),
-        'highscore': fields.Integer(readonly=True)
+        'playerId': fields.Integer(readonly=True, required=False),
+        'playerName': fields.String(description='Player\'s name'),
+        'guest': fields.Boolean(readonly=True, required=False, description='Guest user or not'),
+        'highscore': fields.Integer(readonly=True, required=False, description='Highest point player scored'),
+        'dateEntered': fields.DateTime(readonly=True, required=False, description='Date player entered this channel')
     })
 
     channel = api.model(name='ch', model={
@@ -69,13 +71,13 @@ class SavedInfoDto:
     })
 
     saved_info = api.model(name='saved-info', model={
-        'guest': fields.Boolean(description='Whether this player is guest or signed'),
-        'savedId': fields.Integer(description='Unique saved-info identifier'),
-        'guestPassword': fields.String(description='One-time password needed when loading the info'),
+        'guest': fields.Boolean(required=False, readonly=True, description='Whether this player is guest or signed'),
+        'savedId': fields.Integer(required=False, readonly=True, description='Unique saved-info identifier'),
+        'guestPassword': fields.String(required=False, readonly=True, description='One-time password needed when loading the info'),
         'channelId': fields.Integer(description='Identifier for channel that game belongs'),
         'playerName': fields.String(description='The player\'s name'),
         'score': fields.Integer(description='The point that player gained till saves the game info'),
         'location': fields.Nested(model=location, description='The location player saved this data and quit the gmae.'),
         'items': fields.List(fields.String(), description='List of items the player has'),
-        'dateSaved': fields.DateTime(description='The date player saved this game')
+        'dateSaved': fields.DateTime(required=False, readonly=True, description='The date player saved this game')
     })

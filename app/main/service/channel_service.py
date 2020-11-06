@@ -111,13 +111,15 @@ def enter_this_channel(channelId, data):
 
         # Checking request has a valid jwt token(= if a new player is a signed user)
         if data['signed']['status'] == 'success':
-            signed = True
+            guest = False
         else:
-            signed = False
+            guest = True
         
         channel.participants.append(PlayerInfo(
+            playerId=channel.getNextPlayerId(),
             playerName=data['playerName'],
-            signed=signed
+            guest=guest,
+            dateEntered=datetime.datetime.utcnow()
         ))
         channel.save()
         return 'done'
