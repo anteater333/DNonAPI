@@ -41,7 +41,7 @@ class ChannelDto:
         'playerId': fields.Integer(readonly=True, required=False),
         'playerName': fields.String(description='Player\'s name'),
         'guest': fields.Boolean(readonly=True, required=False, description='Guest user or not'),
-        'highscore': fields.Integer(readonly=True, required=False, description='Highest point player scored'),
+        'highscore': fields.Integer(description='Highest point player scored'),
         'dateEntered': fields.DateTime(readonly=True, required=False, description='Date player entered this channel')
     })
 
@@ -60,14 +60,6 @@ class SavedInfoDto:
     location = api.model(name='location', model={
         'x': fields.Integer(),
         'y': fields.Integer()
-    })
-
-    saving_info = api.model(name='saving-info', model={
-        'channelId': fields.Integer(description='Identifier for channel that game belongs'),
-        'playerName': fields.String(description='The player\'s name'),
-        'score': fields.Integer(description='The point that player gained till saves the game info'),
-        'location': fields.Nested(model=location, description='The location player saved this data and quit the gmae.'),
-        'items': fields.List(fields.String(), description='List of items the player has')
     })
 
     saved_info = api.model(name='saved-info', model={
