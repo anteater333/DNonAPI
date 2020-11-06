@@ -3,7 +3,7 @@ from flask_restx import Resource
 
 from ..util.decorator import token_required, admin_token_required
 from ..util.dto import ChannelDto
-from ..service.channel_service import get_all_channels, save_new_channel, get_a_channel, update_a_channel, get_a_players_list, enter_this_channel, leave_this_channel
+from ..service.channel_service import ChannelService
 from ..service.auth_helper import Auth
 
 import re
@@ -18,7 +18,7 @@ class ChannelList(Resource):
     @api.marshal_list_with(_channel, envelope='data')
     def get(self):
         """List all channels in server"""
-        return get_all_channels()
+        return ChannelService.get_all_channels()
     
     @admin_token_required
     @api.response(201, 'A new channel has successfully been added.')
@@ -27,7 +27,7 @@ class ChannelList(Resource):
     def post(self):
         """Creates a new channel"""
         data = request.json
-        return save_new_channel(data=data)
+        return ChannelService.save_new_channel(data=data)
 
 @api.route('/<channelId>')
 @api.param('channelId', 'The channel identifier')
@@ -37,7 +37,7 @@ class Channel(Resource):
     @api.marshal_list_with(_channel)
     def get(self, channelId):
         """get a channel given their identifier"""
-        channel = get_a_channel(channelId)
+        channel = ChannelService.get_a_channel(channelId)
         if not channel:
             api.abort(404)
         else:
@@ -49,7 +49,7 @@ class Channel(Resource):
     @api.expect(_channel, validate=False)
     def put(self, channelId):
         """update the channel\'s properties."""
-        return update_a_channel(channelId, request.json)
+        return ChannelService.update_a_channel(channelId, request.json)
         
 
     # def delete(self, channelId):
@@ -57,12 +57,12 @@ class Channel(Resource):
 @api.route('/<channelId>/participants')
 @api.param('channelId', 'The channel identifier')
 @api.response(404, 'Channel not found')
-class Participants(Resource):
+class ParticipantsList(Resource):
     @api.doc('get a list of players participating this game.')
     @api.marshal_list_with(_player, envelope='data')
     def get(self, channelId):
         """get a list of players participating this game"""
-        players = get_a_players_list(channelId)
+        players = ChannelService.get_a_players_list(channelId)
         if not type(players) is list:
             api.abort(404)
         else:
@@ -79,7 +79,7 @@ class Participants(Resource):
             api.abort(400, 'The name can only have letters, numbers, underscores and dashes.')
 
         data['signed'] = Auth.get_logged_in_user(request)[0]
-        response = enter_this_channel(channelId, data)
+        response = ChannelService.enter_this_channel(channelId, data)
 
         if not response:
             api.abort(404, 'No such channel.')
@@ -93,16 +93,33 @@ class Participants(Resource):
                 'message': 'Successfully entered.'
             }, 201
 
-@api.route('/<channelId>/participants/<playerName>')
+@api.route('/<channelId>/participants/<playerId>')
 @api.param('channelId', 'The channel identifier')
-@api.param('playerName', 'player\'s name to delete')
-@api.response(401, 'Only the game server could delete.')
+@api.param('playerId', 'player\'s identifier to modify')
+@api.response(401, 'Only the game administrator could access this resource.')
 @api.response(404, 'No such player or channel.')
-class ParticipantsDelete(Resource):
+class Participant(Resource):
     @admin_token_required
-    def delete(self, channelId, playerName):
-        """Delete the player from the list"""
-        response = leave_this_channel(channelId, playerName)
+    @api.doc('Update players highest score')
+    @api.expect(_player)
+    def put(self, channelId, playerId):
+        data = request.json
+        response = ChannelService.update_the_score(channelId, playerId, data['highscore'])
+
+        if not response:
+            api.abort(404, 'No such channel.')
+        elif response == 'noplayer':
+            api.abort(404, 'No such player.')
+        else:
+            return {
+                'status': 'success',
+                'message': 'Successfully updated highscore'
+            }
+
+    @admin_token_required
+    @api.doc('Delete the player from the list')
+    def delete(self, channelId, playerId):
+        response = ChannelService.leave_this_channel(channelId, playerId)
 
         if not response:
             api.abort(404, 'No such channel.')
@@ -113,3 +130,16 @@ class ParticipantsDelete(Resource):
                 'status': 'success',
                 'message': 'Successfully leaved'
             }
+
+@api.route('/<channelId>/ranking')
+@api.param('channelId', 'The channel identifier')
+@api.response(404, 'No such channel')
+class Ranking(Resource):
+    @api.marshal_list_with(_player)
+    def get(self, channelId):
+        ranking = ChannelService.get_channel_ranking(channelId)
+
+        if not ranking:
+            api.abort(404)
+        else:
+            return ranking
