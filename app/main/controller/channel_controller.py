@@ -96,10 +96,8 @@ class ParticipantsList(Resource):
 @api.route('/<channelId>/participants/<playerId>')
 @api.param('channelId', 'The channel identifier')
 @api.param('playerId', 'player\'s identifier to modify')
-@api.response(401, 'Only the game administrator could access this resource.')
 @api.response(404, 'No such player or channel.')
 class Participant(Resource):
-    @admin_token_required
     @api.doc('Update players highest score')
     @api.expect(_player)
     def put(self, channelId, playerId):
@@ -116,7 +114,6 @@ class Participant(Resource):
                 'message': 'Successfully updated highscore'
             }
 
-    @admin_token_required
     @api.doc('Delete the player from the list')
     def delete(self, channelId, playerId):
         response = ChannelService.leave_this_channel(channelId, playerId)
