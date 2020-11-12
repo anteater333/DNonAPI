@@ -13,7 +13,7 @@ _saved_info = SavedInfoDto.saved_info
 @api.route('/')
 class UserList(Resource):
     @api.doc('list_of_registered_users')
-    @api.marshal_list_with(_user, envelope='data')
+    @api.marshal_list_with(_user)
     def get(self):
         """List all registred users"""
         return get_all_users()

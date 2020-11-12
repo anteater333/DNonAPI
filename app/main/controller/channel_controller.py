@@ -15,7 +15,7 @@ _player = ChannelDto.player
 @api.route('/')
 class ChannelList(Resource):
     @api.doc('list_of_all_channels')
-    @api.marshal_list_with(_channel, envelope='data')
+    @api.marshal_list_with(_channel)
     def get(self):
         """List all channels in server"""
         return ChannelService.get_all_channels()
@@ -59,7 +59,7 @@ class Channel(Resource):
 @api.response(404, 'Channel not found')
 class ParticipantsList(Resource):
     @api.doc('get a list of players participating this game.')
-    @api.marshal_list_with(_player, envelope='data')
+    @api.marshal_list_with(_player)
     def get(self, channelId):
         """get a list of players participating this game"""
         players = ChannelService.get_a_players_list(channelId)
