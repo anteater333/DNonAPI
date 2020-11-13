@@ -14,9 +14,10 @@ class User(MongoModel):
     userName = fields.CharField(required=True)
     email = fields.EmailField()
     passwordHash = fields.CharField()
-    savedData = fields.EmbeddedDocumentListField(SavedInfo)
+    savedData = fields.EmbeddedDocumentListField(SavedInfo, blank=True)
     gameLogs = fields.ListField(
-        field=fields.EmbeddedDocumentField('gameLogs')
+        field=fields.EmbeddedDocumentField('gameLogs'),
+        blank=True
     )
     dateRegistered = fields.DateTimeField()
     admin = fields.BooleanField(default=False)
