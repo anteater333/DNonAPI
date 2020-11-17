@@ -6,6 +6,8 @@ from ..util.dto import UserDto, SavedInfoDto
 from ..service.user_service import save_new_user, get_all_users, get_a_user, delete_a_user
 from ..service.saved_service import load_user_game_progress
 
+import re
+
 api = UserDto.api
 _user = UserDto.user
 _saved_info = SavedInfoDto.saved_info
@@ -24,6 +26,10 @@ class UserList(Resource):
     def post(self):
         """Creates a new User"""
         data = request.json
+        # Checking name validation
+        if not re.match("^[\w\d_-]*$", data['userName']):
+            api.abort(400, 'The name can only have letters, numbers, underscores and dashes.')
+
         return save_new_user(data=data)
 
 
