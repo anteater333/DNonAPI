@@ -76,7 +76,8 @@ class ParticipantsList(Resource):
     @api.response(201, 'Succesfully entered')
     @api.response(422, 'Invalid player name.')
     @api.response(404, 'The channel not found.')
-    @api.response(409, 'Conflict with channel state.')
+    @api.response(409, 'Duplicated player name.')
+    @api.response(423, 'Exceeded maximum players number.')
     @api.expect(_player)
     def post(self, channelId):
         """Here comes a new challenger"""
@@ -92,7 +93,7 @@ class ParticipantsList(Resource):
         if not response:
             api.abort(404, 'No such channel.')
         elif response == 'exceed':
-            api.abort(409, 'Exceeded maximum players number.')
+            api.abort(423, 'Exceeded maximum players number.')
         elif response == 'duplicated':
             api.abort(409, 'The name already taken by somebody in this channel.')    
         else:
