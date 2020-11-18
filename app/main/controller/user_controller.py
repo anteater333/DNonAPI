@@ -21,6 +21,8 @@ class UserList(Resource):
         return get_all_users()
 
     @api.response(201, 'User successfully created.')
+    @api.response(409, 'User already exists.')
+    @api.response(422, 'Invalid username.')
     @api.doc('create a new user')
     @api.expect(_user, validate=True)
     def post(self):
@@ -28,7 +30,7 @@ class UserList(Resource):
         data = request.json
         # Checking name validation
         if not re.match("^[\w\d_-]*$", data['userName']):
-            api.abort(400, 'The name can only have letters, numbers, underscores and dashes.')
+            api.abort(422, 'The name can only have letters, numbers, underscores and dashes.')
 
         return save_new_user(data=data)
 
@@ -40,7 +42,7 @@ class User(Resource):
     @api.doc('get a user')
     @api.marshal_list_with(_user)   # user를 dto에 맞춰 serializable 하게 변환
     def get(self, userName):
-        """get a user given their name"""
+        """Get a user given their name"""
         user = get_a_user(userName)
         if not user:
             api.abort(404)
@@ -51,7 +53,7 @@ class User(Resource):
     @api.marshal_with(_user)
     @api.doc('unsubscribe this user')
     def delete(self, userName):
-        """delete user from database"""
+        """Delete user from server"""
         user = delete_a_user(userName)
         if not user:
             api.abort(404)
@@ -61,11 +63,13 @@ class User(Resource):
 @api.route('/<userName>/saved-info/<savedId>')
 @api.param('userName', 'User name who owns data')
 @api.param('savedId', 'Unique saved data identifier')
+@api.response(404, 'Data not found.')
 class SavedInfo(Resource):
     @prove_yourself
     @api.doc('get and delete a saved game progress.')
     @api.marshal_with(_saved_info)
     def delete(self, userName, savedId):
+        """Get and delete a signed user's saved data."""
         saved_data = load_user_game_progress(savedId, userName)
         if not saved_data:
             api.abort(404, 'data not found')

@@ -9,7 +9,7 @@ def save_token(token):
             'status': 'fail',
             'message': e
         }
-        return response_object, 200
+        return response_object, 500
     else:
         response_object = {
             'status': 'success',

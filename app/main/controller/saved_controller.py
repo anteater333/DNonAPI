@@ -13,6 +13,7 @@ _saved_info = SavedInfoDto.saved_info
 class SavedInfo(Resource):
     @api.response(201, 'The game data saved successfully.')
     @api.response(200, 'The data replaced to the latest.')
+    @api.response(404, 'The data not found.')
     @api.doc('saves ongoing game data.')
     @api.expect(_saved_info, validate=True)
     def post(self):
@@ -34,7 +35,9 @@ class SavedInfo(Resource):
 class GuestSavedInfo(Resource):
     @api.doc('get and delete the guest\'s saved game progress.')
     @api.marshal_with(_saved_info)
+    @api.response(404, 'The data not found.')
     def delete(self, savedId, guestPassword):
+        """Get and delete a guest player's saved game data"""
         saved_data = load_guest_game_progress(savedId, guestPassword)
         if not saved_data:
             api.abort(404, 'data not found')
