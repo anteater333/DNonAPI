@@ -18,7 +18,7 @@ class ChannelService:
                 'status': 'fail',
                 'message': 'The maximum number of players should be at least 8 and less than 32.'
             }
-            return response_object, 409
+            return response_object, 422
 
         try:
             battlefield = Battlefield.objects.get({'_id': data['battlefieldId']})
@@ -67,7 +67,7 @@ class ChannelService:
                 'status': 'fail',
                 'message': 'The maximum number of players should be at least 8 and less than 32.'
             }
-            return response_object, 409
+            return response_object, 422
         try:
             channel = Channel.objects.get({'_id': int(channelId)})
 
@@ -80,7 +80,7 @@ class ChannelService:
                 except DoesNotExist:
                     return {
                         'status': 'fail',
-                        'message': 'No such channel'
+                        'message': 'No such battlefield'
                     }, 404
                 channel.battlefield = battlefield
             
