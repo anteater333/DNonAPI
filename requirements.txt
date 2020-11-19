@@ -5,6 +5,7 @@ cffi==1.14.0
 click==7.1.2
 Flask==1.1.2
 Flask-Bcrypt==0.7.1
+Flask-Cors==3.0.9
 Flask-PyMongo==2.3.0
 flask-restx==0.2.0
 Flask-Script==2.0.6
