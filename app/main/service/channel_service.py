@@ -128,15 +128,17 @@ class ChannelService:
                 guest = False
             else:
                 guest = True
-            
-            channel.participants.append(PlayerInfo(
+
+            new_player = PlayerInfo(
                 playerId=channel.getNextPlayerId(),
                 playerName=data['playerName'],
                 guest=guest,
                 dateEntered=datetime.datetime.utcnow()
-            ))
+            )
+            
+            channel.participants.append(new_player)
             channel.save()
-            return 'done'
+            return new_player.playerId
         except DoesNotExist:
             return None
 

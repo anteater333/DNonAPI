@@ -73,7 +73,7 @@ class ParticipantsList(Resource):
             return players
     
     @api.doc('participates at this game')
-    @api.response(201, 'Succesfully entered')
+    @api.response(201, 'Succesfully entered, message : playerId')
     @api.response(422, 'Invalid player name.')
     @api.response(404, 'The channel not found.')
     @api.response(409, 'Duplicated player name.')
@@ -99,7 +99,7 @@ class ParticipantsList(Resource):
         else:
             return {
                 'status': 'success',
-                'message': 'Successfully entered.'
+                'message': response
             }, 201
 
 @api.route('/<channelId>/participants/<playerId>')
