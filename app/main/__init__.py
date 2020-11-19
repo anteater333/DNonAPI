@@ -1,7 +1,7 @@
 from flask import Flask
 from pymodm import connect
 from flask_bcrypt import Bcrypt     # 암호화 관련 모듈
-import logging, logging.handlers, time                # log 모듈
+from flask_cors import CORS, cross_origin
 
 from .config import config_by_name
 
@@ -14,5 +14,7 @@ def create_app(config_name):
     connect(app.config['MONGO_URI'])    # pymodm 사용 전에 반드시 호출
 
     flask_bcrypt.init_app(app)
+
+    CORS(app)               # CORS 헤더 허용
 
     return app
