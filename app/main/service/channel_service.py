@@ -143,7 +143,7 @@ class ChannelService:
             return None
 
     @staticmethod
-    def update_the_score(channelId, playerId, newScore):
+    def update_player_info(channelId, playerId, newScore, newClass):
         try:
             channel = Channel.objects.get({'_id': int(channelId)})
 
