@@ -42,7 +42,8 @@ class ChannelDto:
         'playerName': fields.String(description='Player\'s name'),
         'guest': fields.Boolean(readonly=True, required=False, description='Guest user or not'),
         'highscore': fields.Integer(description='Highest point player scored'),
-        'dateEntered': fields.DateTime(readonly=True, required=False, description='Date player entered this channel')
+        'dateEntered': fields.DateTime(readonly=True, required=False, description='Date player entered this channel'),
+        'class': fields.String(description='Player\'s class')
     })
 
     channel = api.model(name='ch', model={

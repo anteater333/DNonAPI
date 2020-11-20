@@ -9,6 +9,7 @@ class PlayerInfo(MongoModel):
     highscore = fields.IntegerField(default=0)
     guest = fields.BooleanField()
     dateEntered = fields.DateTimeField()
+    playerClass = fields.CharField()
 
     class Meta:
         final = True
