@@ -113,7 +113,7 @@ class Participant(Resource):
     def put(self, channelId, playerId):
         """Update player's game score"""
         data = request.json
-        response = ChannelService.update_the_score(channelId, playerId, data['highscore'])
+        response = ChannelService.update_player_info(channelId, playerId, data['highscore'], data['class'])
 
         if not response:
             api.abort(404, 'No such channel.')
