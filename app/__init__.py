@@ -11,8 +11,8 @@ blueprint = Blueprint('api', __name__)
 api = Api(
     blueprint,
     title='DNon API Server',
-    version='0.2.4',
-    description='600억 대작 게임 DNon의 API 서버입니다. 보안상의 틈이 존재하지 않습니다.',
+    version='0.2.5',
+    description='Dnon Official API Document.',
     contact='anteater1056@gmail.com'
 )
 
