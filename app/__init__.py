@@ -11,7 +11,7 @@ blueprint = Blueprint('api', __name__)
 api = Api(
     blueprint,
     title='DNon API Server',
-    version='0.2.5',
+    version='0.3.0',
     description='Dnon Official API Document.',
     contact='anteater1056@gmail.com'
 )
