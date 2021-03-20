@@ -12,7 +12,7 @@ Flask-Script==2.0.6
 Flask-Testing==0.8.0
 importlib-metadata==1.6.0
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jsonschema==3.2.0
 MarkupSafe==1.1.1
 pycparser==2.20
