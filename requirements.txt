@@ -7,7 +7,7 @@ Flask==1.1.2
 Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.9
 Flask-PyMongo==2.3.0
-flask-restx==0.2.0
+flask-restx==0.5.1
 Flask-Script==2.0.6
 Flask-Testing==0.8.0
 importlib-metadata==1.6.0
